@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <link rel="stylesheet" href="/style.css" media="screen" title="no title" charset="utf-8">
+
+    <h1>Conway's Game of Life</h1>
+    <div id="view" class="conway">
+      <div id="controls">
+        <button type="button" name="button" disabled>Play</button>
+        <button type="button" name="button" disabled>Stop</button><br>
+        <label>Speed 0<input id="speed" type="range" min="0" max="180" value="40"/> 180</label><br>
+        <label>Width 30<input id="width" type="range" min="30" max="600" value="50" disabled/> 600</label><br>
+        <label>Height 30<input id="height" type="range" min="30" max="600" value="50" disabled/> 600</label>
+      </div>
+      <canvas id="canvas" width="50" height="50"></canvas>
+    </div>
+
+    <script src="./src/cell.js" charset="utf-8"></script>
+    <script src="./src/grid.js" charset="utf-8"></script>
+    <script src="./src/conway.js" charset="utf-8"></script>
+    <script src="./src/view.js" charset="utf-8"></script>
+    <script src="./src/viewModel.js" charset="utf-8"></script>
+    <script src="./index.js" charset="utf-8"></script>
+  </body>
+</html>

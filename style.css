@@ -1,0 +1,24 @@
+
+.conway {
+  width: auto;
+  border-collapse: collapse;
+}
+  .conway .cell {
+    width: 10px;
+    height: 10px;
+    border: 1px solid #eee;
+  }
+  .conway .live {
+    background: red;
+  }
+.conway canvas {
+  width: 600px;
+  height: 600px;
+  border: black solid 1px;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
