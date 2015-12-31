@@ -4,6 +4,16 @@ function ViewModel(view, grid) {
   var speedRange = view.speedRange;
   var viewModel = this;
 
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a: 255// * 0.1
+    } : null;
+  }
+
   viewModel.update = function () {
     var context = view.canvas.getContext('2d'),
         imageData, pixels,
@@ -12,18 +22,19 @@ function ViewModel(view, grid) {
         pixels = imageData.data;
     grid.traverse(function (e, cell) {
       if (cell.live) {
-        color = [0, 0, 0];
+        color = cell.color;
       } else {
-        color = [255, 255, 255];
+        color = {r: 255, g: 255, b: 255, a: 255};
       }
 
       i = (cell.y * grid.width + cell.x) * 4;
-      pixels[i+0] = color[0]; //red
-      pixels[i+1] = color[1]; //green
-      pixels[i+2] = color[2]; //blue
-      pixels[i+3] = 255; //alpha
+      pixels[i+0] = color.r; //red
+      pixels[i+1] = color.g; //green
+      pixels[i+2] = color.b; //blue
+      pixels[i+3] = color.a; //alpha
     });
 
+    context.translate(0.5,0.5);
     context.putImageData(imageData, 0,0);
   };
 
@@ -42,12 +53,7 @@ function ViewModel(view, grid) {
 
   viewModel.animate = function () {
     var speed = +speedRange.max - +speedRange.value;
-    // we'll let it play as fast as it likes for now,
-    // even though there's more efficient ways to do this,
-    // but we'll use the input speed to trottle how
-    // often the grid updates.
     if(speed === 0 || speed < 180 && (frame++ % speed) === 0) {
-      console.log(speed);
       viewModel.tick();
     }
     requestAnimationFrame(viewModel.animate);
@@ -56,23 +62,21 @@ function ViewModel(view, grid) {
 
   // set up the bindings
   viewModel.init = function () {
+    setupCanvashandlers();
+    setupControlHandlers();
+  };
+
+  function setupCanvashandlers() {
     var canvas = document.getElementById('canvas'),
         context = canvas.getContext('2d')
     canvas.width = grid.width;
     canvas.height = grid.height;
-    context.imageSmoothingEnabled = false;
-
-    var toggleCell = function (cell) {
-      return function (e) {
-        cell.live = !cell.live;
-      }
-    };
 
     function getPos(canvas, evt) {
       var rect = canvas.getBoundingClientRect();
       return {
-        x: Math.round((evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
-        y: Math.round((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
+        x: Math.floor((evt.clientX - rect.left) / (rect.right - rect.left) * canvas.width),
+        y: Math.floor((evt.clientY - rect.top) / (rect.bottom - rect.top) * canvas.height)
       };
     }
 
@@ -82,6 +86,7 @@ function ViewModel(view, grid) {
       var pos = getPos(canvas, evt);
       var cell = grid.rows[pos.y][pos.x];
       cell.toggle();
+      cell.color = hexToRgb(view.colorInput.value)
       viewModel.update();
     };
     canvas.onmouseup = function(evt) {
@@ -92,10 +97,34 @@ function ViewModel(view, grid) {
 
       var pos = getPos(canvas, evt);
       var cell = grid.rows[pos.y][pos.x];
-      cell.toggle();
+      cell.color = hexToRgb(view.colorInput.value);
       viewModel.update();
+
+      // Only turn on the cell if it's dead
+      if (!cell.live) {
+        cell.toggle();
+      }
     };
-  };
+  }
+
+  function setupControlHandlers() {
+    view.widthRange.addEventListener('input', function() {
+      var width = Number.parseInt(view.widthRange.value);
+      grid.changeSize({
+        width: width
+      });
+      view.canvas.width = width;
+      viewModel.update();
+    });
+    view.heightRange.addEventListener('input', function() {
+      var height = Number.parseInt(view.heightRange.value);
+      grid.changeSize({
+        height: height
+      });
+      view.canvas.height = height;
+      viewModel.update();
+    });
+  }
 
   viewModel.init();
 }

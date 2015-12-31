@@ -1,10 +1,11 @@
 // The model for an individual cell
-function Cell(x, y, grid) {
+function Cell(params) {
   var cell = this;
-  cell.x = x;
-  cell.y = y;
+  cell.x = params.x;
+  cell.y = params.y;
+  cell.color = params.color;
   cell.live = false;
-  cell.grid = grid;
+  cell.grid = params.grid;
 }
 
 // counts nearby living neighbors

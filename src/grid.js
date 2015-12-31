@@ -1,4 +1,4 @@
-// The Controller for our game;
+// The Controller for our game
 function Grid(w, h) {
   var grid = this;
   grid.width = w;
@@ -7,19 +7,48 @@ function Grid(w, h) {
   // this is the Model, really
   grid.rows = null;
 
+  /**
+   * Change the grid size
+   * @param {number} size.width (optional)
+   * @param {number} size.height (optional)
+   */
+  grid.changeSize = function(size) {
+    grid.width = size.width || grid.width;
+    grid.height = size.height || grid.height;
+    grid.reset();
+  };
+
   // use this to initialize or reset the grid
   grid.reset = function () {
     var x, y, row;
-    grid.rows = [];
+    grid.rows = grid.rows || [];
 
-    for (y = 0; y < h; y++) {
-      row = [];
-      for (x = 0; x < w; x++) {
-        row.push(new Cell(x, y, grid));
+    for (y = 0; y < grid.height; y++) {
+      row = grid.rows[y] || [];
+
+      // Add on any additional width sells
+      for (x = row.length; x < grid.width; x++) {
+        row.push(new Cell({
+          x: x, y: y,
+          color: {
+            r: 255, g: 255, b: 255, a: 255
+          },
+          grid: grid
+        }));
       }
-      grid.rows.push(row);
+      // Check if the width was reduced
+      if (row.length > grid.width) {
+        row.splice(grid.width);
+      }
+
+      grid.rows[y] = row;
     }
-  }
+
+    // Check if the height was reduced
+    if (grid.rows.length > grid.height) {
+      grid.rows.splice(grid.height);
+    }
+  };
 
   // call it right away to initialize the grid
   grid.reset();
@@ -39,18 +68,13 @@ function Grid(w, h) {
         }
       }
     }
-  }
+  };
 
   grid.step = function () {
-    // first go trough and count live neighbors
-    // *before* you update each cell.
-    // Otherwise you'll ruin the live neighbor count
-    // for the next one.
     grid.traverse(function (ctxt, cell) {
       cell.examine();
     });
 
-    // *Now* let's update the cells life status.
     grid.traverse(function (ctxt, cell) {
       cell.update();
     });
