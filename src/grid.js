@@ -105,7 +105,7 @@ function Grid(w, h) {
    */
   grid.clear = function() {
     grid.traverse(function(cell) {
-      cell.live = false;
+      cell.kill();
     });
   };
 
@@ -114,11 +114,7 @@ function Grid(w, h) {
    */
   grid.randomize = function() {
     grid.traverse(function(cell) {
-      cell.live = Math.random() < 0.4;
-      cell.color.r = Math.random() * 255;
-      cell.color.g = Math.random() * 255;
-      cell.color.b = Math.random() * 255;
-      cell.color.a = 255 * 0.1;
+      cell.randomize();
     });
   };
 

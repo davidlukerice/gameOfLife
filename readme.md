@@ -5,9 +5,9 @@ For the purposes of this project we will use this one http://jsfiddle.net/blesh/
 Challenge:
   - [x] Step button
   - [x] Conway’s standard set of 4 rules:
-    1. < 2 live neighbors dies
-    2. 2 or 3 live neighbors lives
-    3. > 3 live neighbors dies
+    1. < 2 live neighbors, dies
+    2. 2 or 3 live neighbors, lives
+    3. > 3 live neighbors, dies
     4. dead cell === 3 live neighbors becomes a live cell
   - [x] User can define the height and width
   - [x] Color

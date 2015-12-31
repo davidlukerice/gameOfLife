@@ -1,5 +1,5 @@
 /**
- * View for storing view elements
+ * Stores view elements
  * @param {htmlElement} controlsElem
  * @param {htmlCanvas} canvasElem
  */
