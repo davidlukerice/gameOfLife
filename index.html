@@ -10,12 +10,12 @@
     <h1>Conway's Game of Life</h1>
     <div id="view" class="conway">
       <div id="controls">
-        <button type="button" name="button" disabled>Play</button>
-        <button type="button" name="button" disabled>Stop</button><br>
+        <button id="play" type="button" name="button" disabled>Play/Stop</button>
+        <button id="step" type="button" name="button">Step</button><br>
         <label>Pen Color <input id="color" type="color" name="favcolor" value="#000000"></label><br>
         <label>Speed 0<input id="speed" type="range" min="0" max="180" value="40"/> 180</label><br>
-        <label>Width 30<input id="width" type="range" min="30" max="600" value="50"/> 600</label><br>
-        <label>Height 30<input id="height" type="range" min="30" max="600" value="50"/> 600</label>
+        <label>Width 5<input id="width" type="range" min="5" max="300" value="50"/> 300</label><br>
+        <label>Height 5<input id="height" type="range" min="5" max="300" value="50"/> 300</label>
       </div>
       <canvas id="canvas" width="50" height="50"></canvas>
     </div>

@@ -6,6 +6,7 @@ function Cell(params) {
   cell.color = params.color;
   cell.live = false;
   cell.grid = params.grid;
+  cell.neighbors = null;
 }
 
 // counts nearby living neighbors
@@ -13,8 +14,8 @@ function Cell(params) {
 Cell.prototype.examine = function () {
   var cell = this;
   cell.liveNeighbors = 0;
-
-  cell.traverseNearby(function (ctxt, neighbor) {
+  cell.neighbors = cell.getNeighbors();
+  cell.traverseNearby(function (neighbor) {
     if (neighbor.live) {
       cell.liveNeighbors++;
     }
@@ -30,35 +31,74 @@ Cell.prototype.update = function () {
 
   if (cell.live) {
     if (liveNeighbors <= 1 || liveNeighbors >= 4) {
-      cell.live = false;
+      cell.kill();
+    }
+    else {
+      cell.age();
     }
   } else if (liveNeighbors === 3) {
-    cell.live = true;
+    cell.makeAlive();
   }
-}
+};
+
+/**
+ * Turns back on a cell
+ * @assume That there are only three alive neighbors
+ */
+Cell.prototype.makeAlive = function() {
+  var cell = this;
+  cell.live = true;
+  cell.color.a = 255 * 0.1;
+
+  // Pull color elements from parents
+  // Backwards so can pop off in order
+  var channels = ['b', 'g', 'r'];
+  cell.neighbors.forEach(function(neighbor) {
+    if (neighbor && neighbor.live) {
+      var channel = channels.pop();
+      cell.color[channel] = neighbor.color[channel];
+    }
+  })
+};
+
+Cell.prototype.kill = function() {
+  this.live = false;
+};
+
+Cell.prototype.age = function() {
+  var newAge = this.color.a + 255 * 0.1;
+  this.color.a = newAge > 255 ? 255 : newAge;
+};
+
+Cell.prototype.getNeighbors = function() {
+  var cell = this,
+      grid = cell.grid,
+      onTop = cell.y === 0,
+      onBottom = cell.y === (grid.height - 1),
+      onLeft = cell.x === 0,
+      onRight = cell.x === (grid.width - 1);
+  // Returned neighbors start on the left and moving clockwise
+  return [
+    (onLeft             ) ? null : grid.rows[cell.y    ][cell.x - 1],
+    (onLeft || onTop    ) ? null : grid.rows[cell.y - 1][cell.x - 1],
+    (onTop              ) ? null : grid.rows[cell.y - 1][cell.x    ],
+    (onRight || onTop   ) ? null : grid.rows[cell.y - 1][cell.x + 1],
+    (onRight            ) ? null : grid.rows[cell.y    ][cell.x + 1],
+    (onBottom || onRight) ? null : grid.rows[cell.y + 1][cell.x + 1],
+    (onBottom           ) ? null : grid.rows[cell.y + 1][cell.x    ],
+    (onBottom || onLeft ) ? null : grid.rows[cell.y + 1][cell.x - 1]
+  ];
+};
 
 // A utility function to traverse the 8 nearby cells.
 Cell.prototype.traverseNearby = function (fn) {
-  var cell = this;
-  var context = {
-    stop: false
-  };
-  var grid = cell.grid;
-  var x, y, n;
-  outer: for (y = Math.max(0, cell.y - 1); y <= Math.min(grid.height - 1, cell.y + 1); y++) {
-    for (x = Math.max(0, cell.x - 1); x <= Math.min(grid.width - 1, cell.x + 1); x++) {
-      if (x !== cell.x || y !== cell.y) {
-        var neighbor = grid.rows[y][x];
-        fn(context, neighbor);
-        if (context.stop) {
-          break outer;
-        }
-      }
-    }
-  }
-}
+  this.getNeighbors().forEach(function(neighbor) {
+    if (neighbor)
+      fn(neighbor);
+  });
+};
 
 // toggles life status
 Cell.prototype.toggle = function () {
   this.live = !this.live;
-}
+};

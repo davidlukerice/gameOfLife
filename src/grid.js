@@ -3,8 +3,7 @@ function Grid(w, h) {
   var grid = this;
   grid.width = w;
   grid.height = h;
-
-  // this is the Model, really
+  grid.running = false;
   grid.rows = null;
 
   /**

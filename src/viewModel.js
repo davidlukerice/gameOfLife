@@ -10,7 +10,7 @@ function ViewModel(view, grid) {
       r: parseInt(result[1], 16),
       g: parseInt(result[2], 16),
       b: parseInt(result[3], 16),
-      a: 255// * 0.1
+      a: 255 * 0.1
     } : null;
   }
 
@@ -18,23 +18,19 @@ function ViewModel(view, grid) {
     var context = view.canvas.getContext('2d'),
         imageData, pixels,
         x, y, i, color;
-        imageData = context.createImageData(grid.width, grid.height);
-        pixels = imageData.data;
+
+    imageData = context.createImageData(grid.width, grid.height);
+    pixels = imageData.data;
     grid.traverse(function (e, cell) {
       if (cell.live) {
-        color = cell.color;
-      } else {
-        color = {r: 255, g: 255, b: 255, a: 255};
+        i = (cell.y * grid.width + cell.x) * 4;
+        pixels[i+0] = cell.color.r; //red
+        pixels[i+1] = cell.color.g; //green
+        pixels[i+2] = cell.color.b; //blue
+        pixels[i+3] = cell.color.a; //alpha
       }
-
-      i = (cell.y * grid.width + cell.x) * 4;
-      pixels[i+0] = color.r; //red
-      pixels[i+1] = color.g; //green
-      pixels[i+2] = color.b; //blue
-      pixels[i+3] = color.a; //alpha
     });
 
-    context.translate(0.5,0.5);
     context.putImageData(imageData, 0,0);
   };
 
@@ -53,7 +49,8 @@ function ViewModel(view, grid) {
 
   viewModel.animate = function () {
     var speed = +speedRange.max - +speedRange.value;
-    if(speed === 0 || speed < 180 && (frame++ % speed) === 0) {
+    var runStep = speed === 0 || speed < 180 && (frame++ % speed) === 0;
+    if(grid.running && runStep) {
       viewModel.tick();
     }
     requestAnimationFrame(viewModel.animate);
@@ -68,7 +65,7 @@ function ViewModel(view, grid) {
 
   function setupCanvashandlers() {
     var canvas = document.getElementById('canvas'),
-        context = canvas.getContext('2d')
+        context = canvas.getContext('2d');
     canvas.width = grid.width;
     canvas.height = grid.height;
 
@@ -124,6 +121,9 @@ function ViewModel(view, grid) {
       view.canvas.height = height;
       viewModel.update();
     });
+    view.stepButton.onclick = function() {
+      viewModel.tick();
+    };
   }
 
   viewModel.init();
