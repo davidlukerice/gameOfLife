@@ -1,38 +1,38 @@
-
 .container {
   text-align: center;
   font-family: Sans-Serif;
 }
+
 .conway {
   background: #eee;
   display: inline-block;
-  padding: 15px;
+  padding: 10px;
   border-radius: 5px;
 }
-  .conway h1 {
-    margin: 0 0 10px 0;
-  }
-  .conway #controls {
-    margin-bottom: 10px;
-  }
-  .conway canvas {
-    width: 500px;
-    height: 500px;
-    border: black solid 1px;
 
-    background: white;
-    cursor: crosshair;
+.conway h1 {
+  margin: 0 0 10px 0;
+}
 
-    image-rendering: -moz-crisp-edges;
-    image-rendering: -o-crisp-edges;
-    image-rendering: -webkit-optimize-contrast;
-    -ms-interpolation-mode: nearest-neighbor;
-    image-rendering: pixelated;
+.conway #controls {
+  margin-bottom: 10px;
+}
 
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
+.conway canvas {
+  width: 475px;
+  height: 475px;
+  border: black solid 1px;
+  background: white;
+  cursor: crosshair;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -o-crisp-edges;
+  image-rendering: -webkit-optimize-contrast;
+  -ms-interpolation-mode: nearest-neighbor;
+  image-rendering: pixelated;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

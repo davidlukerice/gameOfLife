@@ -24,4 +24,4 @@ Challenge:
   - [x] Fix color insertion bug (picks up from dead tiles?)
   - [x] Pen size slider
   - [x] Make more robust / modular (for easier extension)
-  - [x] Put back in codepen and send link
+  - [x] Put back in codepen and send link [http://codepen.io/davidlukerice/full/MKJgzg/](http://codepen.io/davidlukerice/full/MKJgzg/)
