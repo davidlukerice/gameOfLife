@@ -1,4 +1,8 @@
-// The Controller for our game
+/**
+ * Model for the game board and necessary logic to simulate the game
+ * @param {int} w
+ * @param {int} h
+ */
 function Grid(w, h) {
   var grid = this;
   grid.width = w;
@@ -17,7 +21,10 @@ function Grid(w, h) {
     grid.reset();
   };
 
-  // use this to initialize or reset the grid
+  /**
+   * Initialize the correct number of cells and rows.
+   * Shrinks or grows the grid according to current width/height
+   */
   grid.reset = function () {
     var x, y, row;
     grid.rows = grid.rows || [];
@@ -25,7 +32,7 @@ function Grid(w, h) {
     for (y = 0; y < grid.height; y++) {
       row = grid.rows[y] || [];
 
-      // Add on any additional width sells
+      // Add on any additional width cells
       for (x = row.length; x < grid.width; x++) {
         row.push(new Cell({
           x: x, y: y,
@@ -35,7 +42,7 @@ function Grid(w, h) {
           grid: grid
         }));
       }
-      // Check if the width was reduced
+      // Check if any cells outside the width need to be removed
       if (row.length > grid.width) {
         row.splice(grid.width);
       }
@@ -43,7 +50,7 @@ function Grid(w, h) {
       grid.rows[y] = row;
     }
 
-    // Check if the height was reduced
+    // Check if any cells outside the height need to be removed
     if (grid.rows.length > grid.height) {
       grid.rows.splice(grid.height);
     }
@@ -52,17 +59,23 @@ function Grid(w, h) {
   // call it right away to initialize the grid
   grid.reset();
 
-  // utility to run through all of the cells
-  // in the grid's rows.
+  /**
+   * Utility to run through all of the cells
+   * @param  {Function} fn function(Cell, x, y)
+   */
   grid.traverse = function (fn) {
     var x, y;
-    outer: for (y = 0; y < grid.height; y++) {
+    for (y = 0; y < grid.height; y++) {
       for (x = 0; x < grid.width; x++) {
         fn(grid.rows[y][x], x, y);
       }
     }
   };
 
+  /**
+   * Simulates a single step in the game
+   * @return {[type]} [description]
+   */
   grid.step = function () {
     grid.traverse(function (cell) {
       cell.examine();
@@ -73,11 +86,18 @@ function Grid(w, h) {
     });
   };
 
+  /**
+   * Kills off all cells
+   */
   grid.clear = function() {
     grid.traverse(function(cell) {
       cell.live = false;
     });
   };
+
+  /**
+   * Randomly turns on cells and changes their color
+   */
   grid.randomize = function() {
     grid.traverse(function(cell) {
       cell.live = Math.random() < 0.4;

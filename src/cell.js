@@ -1,4 +1,10 @@
-// The model for an individual cell
+/**
+ * The model for each cell
+ * @params {int} params.x
+ * @params {int} params.y
+ * @params {obj} params.color {r,g,b,a}
+ * @params {Grid} params.grid
+ */
 function Cell(params) {
   var cell = this;
   cell.x = params.x;
@@ -9,8 +15,9 @@ function Cell(params) {
   cell.aliveNeighborColors = null;
 }
 
-// counts nearby living neighbors
-// and updates cell.liveNeighbors
+Cell.AGE_UNIT = 255 * 0.1;
+
+// counts nearby living neighbors and stores their colors
 Cell.prototype.examine = function () {
   var cell = this;
   cell.liveNeighbors = 0;
@@ -24,9 +31,10 @@ Cell.prototype.examine = function () {
   });
 };
 
-// The actual, important logic for CGL is
-// done here. Update the live status based
-// on current status and living neighbor count.
+/**
+ * Update cell's live status and color based on their neighbors
+ * @note Should be called after all cells are 'examined'
+ */
 Cell.prototype.update = function () {
   var cell = this,
     liveNeighbors = cell.liveNeighbors;
@@ -50,10 +58,10 @@ Cell.prototype.update = function () {
 Cell.prototype.makeAlive = function() {
   var cell = this;
   cell.live = true;
-  cell.color.a = 255 * 0.1;
+  cell.color.a = Cell.AGE_UNIT;
 
   // Pull color elements from parents
-  // Backwards so can pop off in order
+  // Backwards so can pop off in order of rgb
   var channels = ['b', 'g', 'r'];
   cell.aliveNeighborColors.forEach(function(color) {
     if (color) {
@@ -67,11 +75,17 @@ Cell.prototype.kill = function() {
   this.live = false;
 };
 
+/**
+ * Increment the age of the cell. Capped at max color value;
+ */
 Cell.prototype.age = function() {
-  var newAge = this.color.a + 255 * 0.1;
+  var newAge = this.color.a + Cell.AGE_UNIT;
   this.color.a = newAge > 255 ? 255 : newAge;
 };
 
+/**
+ * @return {array} Neighbors starting on left and going in clockwise order
+ */
 Cell.prototype.getNeighbors = function() {
   var cell = this,
       grid = cell.grid,
@@ -79,7 +93,6 @@ Cell.prototype.getNeighbors = function() {
       onBottom = cell.y === (grid.height - 1),
       onLeft = cell.x === 0,
       onRight = cell.x === (grid.width - 1);
-  // Returned neighbors start on the left and moving clockwise
   return [
     (onLeft             ) ? null : grid.rows[cell.y    ][cell.x - 1],
     (onLeft || onTop    ) ? null : grid.rows[cell.y - 1][cell.x - 1],
@@ -92,7 +105,10 @@ Cell.prototype.getNeighbors = function() {
   ];
 };
 
-// A utility function to traverse the 8 nearby cells.
+/**
+ * Traverses all 8 sides
+ * @param  {Function} fn function(cell)
+ */
 Cell.prototype.traverseNearby = function (fn) {
   this.getNeighbors().forEach(function(neighbor) {
     if (neighbor)
@@ -100,11 +116,16 @@ Cell.prototype.traverseNearby = function (fn) {
   });
 };
 
-// toggles life status
+/**
+ * Toggles whether the cell is alive or not
+ */
 Cell.prototype.toggle = function () {
   this.live = !this.live;
 };
 
+/**
+ * @return {obj} A duplicate of the cell's color
+ */
 Cell.prototype.getColor = function() {
   return {
     r: this.color.r,

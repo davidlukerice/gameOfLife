@@ -1,4 +1,8 @@
-// ViewModel to do the binding
+/**
+ * Creates bindings between view and model
+ * @param {View} view
+ * @param {Grid} grid
+ */
 function ViewModel(view, grid) {
   var table = view.table;
   var speedRange = view.speedRange;
@@ -14,6 +18,9 @@ function ViewModel(view, grid) {
     } : null;
   }
 
+  /**
+   * Updates the current view
+   */
   viewModel.update = function () {
     var context = view.canvas.getContext('2d'),
         imageData, pixels,
@@ -34,12 +41,15 @@ function ViewModel(view, grid) {
     context.putImageData(imageData, 0,0);
   };
 
-  // update the grid, and then update the view
+  /**
+   * updates the grid, and then update the view
+   */
   viewModel.tick = function () {
     grid.step();
     viewModel.update();
   };
 
+  // Shim requestAnimationFrame
   var requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame || function (fn) {
       setTimeout(fn, 1000 / 60);
     };
@@ -57,7 +67,9 @@ function ViewModel(view, grid) {
   }
   requestAnimationFrame(viewModel.animate);
 
-  // set up the bindings
+  /**
+   * Setup initial bindings
+   */
   viewModel.init = function () {
     setupCanvashandlers();
     setupControlHandlers();
@@ -97,7 +109,8 @@ function ViewModel(view, grid) {
       cell.color = hexToRgb(view.colorInput.value);
       viewModel.update();
 
-      // Only turn on the cell if it's dead
+      // Only turn on the cell if it's dead, making it much
+      // easier to paint live cells
       if (!cell.live) {
         cell.toggle();
       }

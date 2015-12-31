@@ -1,3 +1,8 @@
+/**
+ * View for storing view elements
+ * @param {htmlElement} controlsElem
+ * @param {htmlCanvas} canvasElem
+ */
 function View(controlsElem, canvasElem) {
   var view = this;
   view.playButton = controlsElem.querySelector('#play');

@@ -1,3 +1,8 @@
+/**
+ * Conway's game of life
+ * @param {int} gridWidth
+ * @param {int} gridHeight
+ */
 function Conway(gridWidth, gridHeight) {
   var conway = this;
   conway.grid = new Grid(gridWidth, gridHeight);
