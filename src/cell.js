@@ -48,18 +48,25 @@ Cell.prototype.update = function () {
     }
   } else if (liveNeighbors === 3) {
     cell.makeAlive();
+    cell.inheritColorFromNeighbors();
   }
 };
 
+Cell.prototype.makeAlive = function() {
+  this.live = true;
+};
+
+Cell.prototype.kill = function() {
+  this.live = false;
+};
+
 /**
- * Turns back on a cell
+ * Gets color values from neighbors
  * @assume That there are only three alive neighbors
  */
-Cell.prototype.makeAlive = function() {
+Cell.prototype.inheritColorFromNeighbors = function() {
   var cell = this;
-  cell.live = true;
   cell.color.a = Cell.AGE_UNIT;
-
   // Pull color elements from parents
   // Backwards so can pop off in order of rgb
   var channels = ['b', 'g', 'r'];
@@ -71,9 +78,6 @@ Cell.prototype.makeAlive = function() {
   });
 };
 
-Cell.prototype.kill = function() {
-  this.live = false;
-};
 
 /**
  * Increment the age of the cell. Capped at max color value;

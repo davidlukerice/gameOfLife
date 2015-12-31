@@ -1,5 +1,6 @@
 /**
  * Conway's game of life
+ * Extended from http://jsfiddle.net/blesh/n9S8R/light/
  * @param {int} gridWidth
  * @param {int} gridHeight
  */

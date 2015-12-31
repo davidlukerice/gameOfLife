@@ -58,13 +58,30 @@ function Grid(w, h) {
 
   /**
    * Utility to run through all of the cells
-   * @param  {Function} fn function(Cell, x, y)
+   * @param {Function} fn function(Cell, x, y)
    */
   grid.traverse = function (fn) {
     var x, y;
     for (y = 0; y < grid.height; y++) {
       for (x = 0; x < grid.width; x++) {
         fn(grid.rows[y][x], x, y);
+      }
+    }
+  };
+
+  /**
+   * Utility to run through all the cells from (x1, y1)
+   * up to (x2, y2)
+   * @param {obj} bounds {x1,y1,x2,y2}
+   * @param {Function} fn function(cell, x, y)
+   */
+  grid.traverseBounds = function(bounds, fn) {
+    var x, y;
+    for (y = bounds.y1; y < bounds.y2; y++) {
+      for (x = bounds.x1; x < bounds.x2; x++) {
+        if (grid.rows[y] && grid.rows[y][x]) {
+          fn(grid.rows[y][x], x, y);
+        }
       }
     }
   };

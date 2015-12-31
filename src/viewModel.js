@@ -92,29 +92,45 @@ function ViewModel(view, grid) {
     var mouseDown = false;
     canvas.onmousedown = function(evt) {
       mouseDown = true;
-      var pos = getPos(canvas, evt);
-      var cell = grid.rows[pos.y][pos.x];
-      cell.toggle();
-      cell.color = hexToRgb(view.colorInput.value)
-      viewModel.update();
+      drawSquare(evt, true);
     };
     canvas.onmouseup = function(evt) {
       mouseDown = false;
     };
     canvas.onmousemove = function(evt) {
       if (!mouseDown) return;
-
-      var pos = getPos(canvas, evt);
-      var cell = grid.rows[pos.y][pos.x];
-      cell.color = hexToRgb(view.colorInput.value);
-      viewModel.update();
-
-      // Only turn on the cell if it's dead, making it much
-      // easier to paint live cells
-      if (!cell.live) {
-        cell.toggle();
-      }
+      drawSquare(evt);
     };
+
+    function drawSquare(evt, canKill) {
+      var pos = getPos(canvas, evt);
+
+      var clickedCell = grid.rows[pos.y][pos.x];
+      // Kill the entire square of cells if you can kill
+      // and the middle cell is alive
+      var killingCells = clickedCell.live && canKill;
+
+      var penSize = Number.parseInt(view.penSizeRange.value);
+      var hPenSize = penSize/2;
+      // Shifts up and left one if size is even
+      grid.traverseBounds({
+        x1: pos.x - Math.floor(hPenSize),
+        y1: pos.y - Math.floor(hPenSize),
+        x2: pos.x + Math.ceil(hPenSize),
+        y2: pos.y + Math.ceil(hPenSize)
+      }, function(cell) {
+        cell.color = hexToRgb(view.penColorInput.value);
+
+        if (killingCells) {
+          cell.kill();
+        }
+        else {
+          cell.makeAlive();
+        }
+      });
+
+      viewModel.update();
+    }
   }
 
   function setupControlHandlers() {

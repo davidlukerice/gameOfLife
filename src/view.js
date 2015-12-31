@@ -9,7 +9,8 @@ function View(controlsElem, canvasElem) {
   view.stepButton = controlsElem.querySelector('#step');
   view.clearButton = controlsElem.querySelector('#clear');
   view.randButton = controlsElem.querySelector('#rand');
-  view.colorInput = controlsElem.querySelector('#color');
+  view.penColorInput = controlsElem.querySelector('#penColor');
+  view.penSizeRange = controlsElem.querySelector('#penSize');
   view.speedRange = controlsElem.querySelector('#speed');
   view.widthRange = controlsElem.querySelector('#width');
   view.heightRange = controlsElem.querySelector('#height');
