@@ -1,2 +1,2 @@
 
-window.conway = new Conway(50, 50);
+window.conway = new Conway(64, 64);

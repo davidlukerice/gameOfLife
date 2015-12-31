@@ -152,4 +152,5 @@ function ViewModel(view, grid) {
   }
 
   viewModel.init();
+  viewModel.update();
 }

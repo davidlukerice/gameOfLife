@@ -56,9 +56,6 @@ function Grid(w, h) {
     }
   };
 
-  // call it right away to initialize the grid
-  grid.reset();
-
   /**
    * Utility to run through all of the cells
    * @param  {Function} fn function(Cell, x, y)
@@ -107,4 +104,8 @@ function Grid(w, h) {
       cell.color.a = 255 * 0.1;
     });
   };
+
+  // call it right away to initialize the grid
+  grid.reset();
+  grid.randomize();
 }

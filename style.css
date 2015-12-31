@@ -1,21 +1,26 @@
 
-.conway {
-  width: auto;
-  border-collapse: collapse;
+.container {
+  text-align: center;
+  font-family: Sans-Serif;
 }
-  .conway .cell {
-    width: 10px;
-    height: 10px;
-    border: 1px solid #eee;
+.conway {
+  background: #eee;
+  display: inline-block;
+  padding: 15px;
+  border-radius: 5px;
+}
+  .conway h1 {
+    margin: 0 0 10px 0;
   }
-  .conway .live {
-    background: red;
+  .conway #controls {
+    margin-bottom: 10px;
   }
   .conway canvas {
-    width: 600px;
-    height: 600px;
+    width: 500px;
+    height: 500px;
     border: black solid 1px;
 
+    background: white;
     cursor: crosshair;
 
     image-rendering: -moz-crisp-edges;
