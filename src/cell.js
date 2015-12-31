@@ -6,7 +6,7 @@ function Cell(params) {
   cell.color = params.color;
   cell.live = false;
   cell.grid = params.grid;
-  cell.neighbors = null;
+  cell.aliveNeighborColors = null;
 }
 
 // counts nearby living neighbors
@@ -14,7 +14,9 @@ function Cell(params) {
 Cell.prototype.examine = function () {
   var cell = this;
   cell.liveNeighbors = 0;
-  cell.neighbors = cell.getNeighbors();
+  cell.aliveNeighborColors = cell.getNeighbors().map(function(neighbor) {
+    return (neighbor && neighbor.live) ? neighbor.getColor() : null;
+  });
   cell.traverseNearby(function (neighbor) {
     if (neighbor.live) {
       cell.liveNeighbors++;
@@ -53,12 +55,12 @@ Cell.prototype.makeAlive = function() {
   // Pull color elements from parents
   // Backwards so can pop off in order
   var channels = ['b', 'g', 'r'];
-  cell.neighbors.forEach(function(neighbor) {
-    if (neighbor && neighbor.live) {
+  cell.aliveNeighborColors.forEach(function(color) {
+    if (color) {
       var channel = channels.pop();
-      cell.color[channel] = neighbor.color[channel];
+      cell.color[channel] = color[channel];
     }
-  })
+  });
 };
 
 Cell.prototype.kill = function() {
@@ -101,4 +103,13 @@ Cell.prototype.traverseNearby = function (fn) {
 // toggles life status
 Cell.prototype.toggle = function () {
   this.live = !this.live;
+};
+
+Cell.prototype.getColor = function() {
+  return {
+    r: this.color.r,
+    g: this.color.g,
+    b: this.color.b,
+    a: this.color.a
+  };
 };

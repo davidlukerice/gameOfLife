@@ -19,7 +19,7 @@ Challenge:
   - [x] Clear the board button
   - [x] Random button
   - [x] Speed Slider
-  - [ ] Fix color insertion bug (picks up from dead tiles?)
+  - [x] Fix color insertion bug (picks up from dead tiles?)
   - [ ] Make more robust / modular (for easier extension)
 
 Enhancements
