@@ -23,5 +23,5 @@ Challenge:
   - [x] Speed Slider
   - [x] Fix color insertion bug (picks up from dead tiles?)
   - [x] Pen size slider
-  - [ ] Make more robust / modular (for easier extension)
-  - [ ] Put back in jsFiddle and send link
+  - [x] Make more robust / modular (for easier extension)
+  - [x] Put back in codepen and send link

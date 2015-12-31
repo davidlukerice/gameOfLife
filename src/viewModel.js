@@ -8,16 +8,6 @@ function ViewModel(view, grid) {
   var speedRange = view.speedRange;
   var viewModel = this;
 
-  function hexToRgb(hex) {
-    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-    return result ? {
-      r: parseInt(result[1], 16),
-      g: parseInt(result[2], 16),
-      b: parseInt(result[3], 16),
-      a: 255 * 0.1
-    } : null;
-  }
-
   /**
    * Updates the current view
    */
@@ -112,7 +102,7 @@ function ViewModel(view, grid) {
 
       var penSize = Number.parseInt(view.penSizeRange.value);
       var hPenSize = penSize/2;
-      // Shifts up and left one if size is even
+      // Shifts square up and left one if size is even
       grid.traverseBounds({
         x1: pos.x - Math.floor(hPenSize),
         y1: pos.y - Math.floor(hPenSize),
@@ -131,6 +121,16 @@ function ViewModel(view, grid) {
 
       viewModel.update();
     }
+  }
+
+  function hexToRgb(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? {
+      r: parseInt(result[1], 16),
+      g: parseInt(result[2], 16),
+      b: parseInt(result[3], 16),
+      a: 255 * 0.1
+    } : null;
   }
 
   function setupControlHandlers() {
