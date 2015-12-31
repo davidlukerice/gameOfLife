@@ -56,26 +56,35 @@ function Grid(w, h) {
   // in the grid's rows.
   grid.traverse = function (fn) {
     var x, y;
-    var context = {
-      stop: false
-    };
     outer: for (y = 0; y < grid.height; y++) {
       for (x = 0; x < grid.width; x++) {
-        fn(context, grid.rows[y][x], x, y);
-        if (context.stop) {
-          break outer;
-        }
+        fn(grid.rows[y][x], x, y);
       }
     }
   };
 
   grid.step = function () {
-    grid.traverse(function (ctxt, cell) {
+    grid.traverse(function (cell) {
       cell.examine();
     });
 
-    grid.traverse(function (ctxt, cell) {
+    grid.traverse(function (cell) {
       cell.update();
+    });
+  };
+
+  grid.clear = function() {
+    grid.traverse(function(cell) {
+      cell.live = false;
+    });
+  };
+  grid.randomize = function() {
+    grid.traverse(function(cell) {
+      cell.live = Math.random() < 0.4;
+      cell.color.r = Math.random() * 255;
+      cell.color.g = Math.random() * 255;
+      cell.color.b = Math.random() * 255;
+      cell.color.a = 255 * 0.1;
     });
   };
 }

@@ -15,10 +15,11 @@ Challenge:
   - [x] Model the maturity of each cell with opacity.
     - [x] opacity will start at 0.1
     - [x] increase by 0.1 each cycle of the game it survives to 1
-  - [ ] Play/Pause buttons
-  - [ ] Clear the board button
-  - [ ] Speed Slider
-  - [ ] Random button
+  - [x] Play/Pause buttons
+  - [x] Clear the board button
+  - [x] Random button
+  - [x] Speed Slider
+  - [ ] Fix color insertion bug (picks up from dead tiles?)
   - [ ] Make more robust / modular (for easier extension)
 
 Enhancements

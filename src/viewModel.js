@@ -21,7 +21,7 @@ function ViewModel(view, grid) {
 
     imageData = context.createImageData(grid.width, grid.height);
     pixels = imageData.data;
-    grid.traverse(function (e, cell) {
+    grid.traverse(function (cell) {
       if (cell.live) {
         i = (cell.y * grid.width + cell.x) * 4;
         pixels[i+0] = cell.color.r; //red
@@ -121,8 +121,20 @@ function ViewModel(view, grid) {
       view.canvas.height = height;
       viewModel.update();
     });
+    view.playButton.onclick = function() {
+      grid.running = !grid.running;
+      view.playButton.firstChild.data = grid.running ? 'Stop' : 'Play';
+    };
     view.stepButton.onclick = function() {
       viewModel.tick();
+    };
+    view.clearButton.onclick = function() {
+      grid.clear();
+      viewModel.update();
+    };
+    view.randButton.onclick = function() {
+      grid.randomize();
+      viewModel.update();
     };
   }
 

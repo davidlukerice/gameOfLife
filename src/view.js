@@ -1,6 +1,9 @@
 function View(controlsElem, canvasElem) {
   var view = this;
+  view.playButton = controlsElem.querySelector('#play');
   view.stepButton = controlsElem.querySelector('#step');
+  view.clearButton = controlsElem.querySelector('#clear');
+  view.randButton = controlsElem.querySelector('#rand');
   view.colorInput = controlsElem.querySelector('#color');
   view.speedRange = controlsElem.querySelector('#speed');
   view.widthRange = controlsElem.querySelector('#width');
